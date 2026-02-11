@@ -15,6 +15,9 @@
 
   <ItemGroup>
     <Folder Include="Controllers\" />
+    <Folder Include="Domain\" />
+    <Folder Include="DTOs\" />
+    <Folder Include="Infrastructure\Persistence\" />
   </ItemGroup>
 
 </Project>
