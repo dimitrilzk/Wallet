@@ -2,15 +2,21 @@
 {
     public abstract class BaseEntity
     {
-        protected BaseEntity(Guid UserId)
+        protected BaseEntity(Guid createdByUserId)
         {
             CreatedAt = DateTime.UtcNow;
-            CreatedBy = UserId;
+            CreatedBy = createdByUserId;
         }
 
-        public DateTime CreatedAt { get; set; }
-        public Guid CreatedBy { get; set;  }
-        public DateTime? UpdatedAt { get; set; }
-        public Guid? UpdatedBy { get; set; }
+        public DateTime CreatedAt { get; private set; }
+        public Guid CreatedBy { get; private set;  }
+        public DateTime? UpdatedAt { get; private set; }
+        public Guid? UpdatedBy { get; private set; }
+
+        public void SetUpdated(Guid updatedByUserId)
+        {
+            UpdatedAt = DateTime.UtcNow;
+            UpdatedBy = updatedByUserId;
+        }
     }
 }

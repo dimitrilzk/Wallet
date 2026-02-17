@@ -2,6 +2,11 @@
 {
     public class AppUser : BaseEntity
     {
+        public AppUser(Guid createdByUserId, string firstName) : base(createdByUserId)
+        {
+            FirstName = firstName;
+        }
+
         public string FirstName { get; set; }
 
         // Global balances
