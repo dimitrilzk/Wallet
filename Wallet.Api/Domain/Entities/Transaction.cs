@@ -16,7 +16,7 @@
         public DateTime TransacrionDate { get; set; }
         public string ImpactedPocket { get; set; } // Savings, Investments, Cash
 
-        public virtual Pocket Pocket { get; set; }
-        public virtual TransactionCategory Category { get; set; }
+        public Pocket Pocket { get; set; }
+        public TransactionCategory Category { get; set; }
     }
 }

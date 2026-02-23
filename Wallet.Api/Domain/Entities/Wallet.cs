@@ -12,7 +12,7 @@
         public Guid UserId { get; set; }
         public int Year { get; set; }
 
-        public virtual AppUser User { get; set; }
-        public virtual ICollection<Pocket> Pockets { get; set; } = new List<Pocket>();
+        public AppUser User { get; set; }
+        public ICollection<Pocket> Pockets { get; set; } = new List<Pocket>();
     }
 }

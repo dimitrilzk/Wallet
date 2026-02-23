@@ -19,8 +19,8 @@ namespace Wallet.Api.Domain.Entities
 
         public decimal TotalBudget => Transactions?.Sum(t => t.Amount) ?? 0;
 
-        public virtual Wallet Wallet { get; set; }
-        public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
+        public Wallet Wallet { get; set; }
+        public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 
     }
 }
