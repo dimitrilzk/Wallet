@@ -17,6 +17,5 @@
 
         // Navigation
         public ICollection<Wallet> Wallets { get; set; } = new List<Wallet>();
-        public ICollection<Category> Categories { get; set; } = new List<Category>();
     }
 }

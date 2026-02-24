@@ -10,8 +10,8 @@ namespace Wallet.Api.Domain.Entities
         }
 
         public Guid Id { get; set; }
-        public Guid WalletId { get; set; }
         public Guid UserId { get; set; }
+        public Guid WalletId { get; set; }
         public string Name { get; set; }
         public PocketType Type { get; set; }
         public bool IsCustom { get; set; }
