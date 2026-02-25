@@ -1,4 +1,6 @@
-﻿namespace Wallet.Api.Domain.Entities
+﻿using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+
+namespace Wallet.Api.Domain.Entities
 {
     public class AppUser : BaseEntity
     {
@@ -17,5 +19,6 @@
 
         // Navigation
         public ICollection<Wallet> Wallets { get; set; } = new List<Wallet>();
+        public ICollection<TransactionCategory> TransactionCategories { get; set; } = new List<TransactionCategory>();
     }
 }
