@@ -19,6 +19,6 @@ namespace Wallet.Api.Domain.Entities
 
         // Navigation
         public ICollection<Wallet> Wallets { get; set; } = new List<Wallet>();
-        public ICollection<TransactionCategory> TransactionCategories { get; set; } = new List<TransactionCategory>();
+        public ICollection<Category> Categories { get; set; } = new List<Category>();
     }
 }

@@ -17,6 +17,6 @@
         public string ImpactedPocket { get; set; } // Savings, Investments, Cash
 
         public Pocket Pocket { get; set; }
-        public TransactionCategory Category { get; set; }
+        public Category Category { get; set; }
     }
 }
