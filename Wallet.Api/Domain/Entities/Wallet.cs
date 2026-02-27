@@ -13,7 +13,7 @@
         public Guid UserId { get; set; }
         public int Year { get; set; } = 0;
 
-        public AppUser User { get; set; } = null!;
+        public AppUser? User { get; set; }
         public ICollection<Pocket> Pockets { get; set; } = new List<Pocket>();
     }
 }

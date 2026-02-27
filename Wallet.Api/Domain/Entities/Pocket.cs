@@ -4,9 +4,10 @@ namespace Wallet.Api.Domain.Entities
 {
     public abstract class Pocket : BaseEntity
     {
-        protected Pocket(Guid createdByUserId) : base(createdByUserId)
+        protected Pocket(Guid createdByUserId, string pocketName) : base(createdByUserId)
         {
             UserId = createdByUserId;
+            Name = pocketName;
         }
 
         public Guid Id { get; set; }
@@ -21,6 +22,5 @@ namespace Wallet.Api.Domain.Entities
 
         public Wallet Wallet { get; set; }
         public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
-
     }
 }

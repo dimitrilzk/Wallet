@@ -2,9 +2,11 @@
 {
     public class Transaction : BaseEntity
     {
-        public Transaction(Guid createdByUserId) : base(createdByUserId)
+        public Transaction(Guid createdByUserId, Guid pocketId, Guid categoryId) : base(createdByUserId)
         {
             UserId = createdByUserId;
+            PocketId = pocketId;
+            CategoryId = categoryId;
         }
 
         public Guid Id { get; set; }
