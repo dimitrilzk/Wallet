@@ -1,9 +1,11 @@
-﻿namespace Wallet.Api.Domain.Entities
+﻿using Wallet.Api.Domain.Interfaces;
+
+namespace Wallet.Api.Domain.Entities
 {
-    public class Category : BaseEntity
+    public class Category : IEntity, IAuditable, ISoftDeletable
     {
-        protected Category() : base(Guid.Empty) { }
-        public Category(Guid createdByUserId, string name) : base(createdByUserId)
+        protected Category() { }
+        public Category(Guid createdByUserId, string name)
         {
             UserId = createdByUserId;
             Name = name;
@@ -16,6 +18,17 @@
         public string? Description { get; set; }
         public bool IsSystemDefault { get; set; }
 
+        // IAuditable
+        public DateTime CreatedAt { get; set; }
+        public Guid? CreatedBy { get; set; }
+        public DateTime? UpdatedAt { get; set; }
+        public Guid? UpdatedBy { get; set; }
+
+        // ISoftDeletable
+        public bool IsDeleted { get; set; }
+        public DateTime? DeletedAt { get; set; }
+
+        // Navigation
         public AppUser? User { get; set; }
         public Category? ParentCategory { get; set; }
         public ICollection<Category> Subcategories { get; set; } = new List<Category>();
