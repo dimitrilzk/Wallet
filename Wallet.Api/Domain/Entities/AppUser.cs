@@ -19,7 +19,7 @@ namespace Wallet.Api.Domain.Entities
             CashSavings = cashSavings;
         }
 
-        public Guid Id { get; set; }
+        public Guid Id { get; private set; }
         public string FirstName { get; set; }
 
         // Users starter pack
