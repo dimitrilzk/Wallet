@@ -29,6 +29,7 @@ namespace Wallet.Api.Domain.Entities
         public bool IsDeleted { get; set; }
         public DateTime? DeletedAt { get; set; }
 
+        // Navigation
         public AppUser User { get; set; }
         public ICollection<Pocket> Pockets { get; set; } = new List<Pocket>();
 
