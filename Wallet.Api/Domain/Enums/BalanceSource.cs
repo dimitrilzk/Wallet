@@ -1,6 +1,6 @@
 ﻿namespace Wallet.Api.Domain.Enums
 {
-    public enum PocketFundingSource
+    public enum BalanceSource
     {
         BankLiquidity = 1,
         CashLiquidity = 2,

@@ -12,18 +12,18 @@ namespace Wallet.Api.Domain.Entities
             Guid walletId,
             string name,
             PocketRole role,
-            PocketFundingSource fundingSource,
-            decimal? plannedAmount = null,
-            bool isRecurring = false)
+            BalanceSource defaultSource,
+            bool isRecurring = false,
+            decimal? plannedAmount = null)
         {
             Id = Guid.NewGuid();
             UserId = userId;
             WalletId = walletId;
             Name = name;
             Role = role;
-            FundingSource = fundingSource;
-            PlannedAmount = plannedAmount;
+            DefaultBalanceSource = defaultSource;
             IsRecurring = isRecurring;
+            PlannedAmount = plannedAmount;
         }
 
         public Guid Id { get; private set; }
@@ -31,16 +31,9 @@ namespace Wallet.Api.Domain.Entities
         public Guid WalletId { get; private set; }
 
         public string Name { get; private set; }
-
-        // Expense - Income - SavingGoal - Investment 
-        public PocketRole Role { get; private set; } 
-
-        // BankLiquidity - CashLiquidity - BankSavings - CashSavings 
-        public PocketFundingSource FundingSource { get; private set; } 
-
-        // Budget pianificato/obbiettivo della pocket
-        public decimal? PlannedAmount { get; private set; }
-
+        public PocketRole Role { get; private set; } // Expense - Income - SavingGoal - Investment
+        public BalanceSource DefaultBalanceSource { get; private set; } // BankLiquidity - CashLiquidity - BankSavings - CashSavings 
+        public decimal? PlannedAmount { get; private set; } // Budget pianificato/obbiettivo della pocket
         public bool IsRecurring { get; private set; }
 
         // Saldo attuale della pocket (derivato o mantenuto)
@@ -70,9 +63,9 @@ namespace Wallet.Api.Domain.Entities
             Role = role; 
         }
 
-        public void ChangeFundingSource(PocketFundingSource fundingSource)
+        public void ChangeDefaultBalanceSource(BalanceSource balanceSource)
         {
-            FundingSource = fundingSource;
+            DefaultBalanceSource = balanceSource;
         }
 
         public void ChangePlannedAmount(decimal plannedAmount)
