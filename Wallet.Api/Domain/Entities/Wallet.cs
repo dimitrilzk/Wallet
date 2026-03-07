@@ -6,10 +6,10 @@ namespace Wallet.Api.Domain.Entities
     public class Wallet : IEntity, IAuditable, ISoftDeletable
     {
         protected Wallet() { }
-        public Wallet(Guid createdByUserId, int year, WalletStatus walletStatus)
+        public Wallet(Guid userId, int year, WalletStatus walletStatus)
         {
             Id = Guid.NewGuid();
-            UserId = createdByUserId;
+            UserId = userId;
             Year = year;
             WalletStatus = walletStatus;
         }
@@ -33,16 +33,7 @@ namespace Wallet.Api.Domain.Entities
         public AppUser User { get; set; }
         public ICollection<Pocket> Pockets { get; set; } = new List<Pocket>();
 
-        public void ChangeYear(int newYear)
-        {
-            Year = newYear;
-            //TODO LOG
-        }
-
-        public void ChangeStatus(WalletStatus walletStatus)
-        {
-            WalletStatus = walletStatus;
-            //TODO LOG
-        }
+        public void ChangeYear(int newYear) => Year = newYear;
+        public void ChangeStatus(WalletStatus walletStatus) => WalletStatus = walletStatus;
     }
 }

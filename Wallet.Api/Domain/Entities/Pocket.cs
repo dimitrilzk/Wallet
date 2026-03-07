@@ -55,27 +55,11 @@ namespace Wallet.Api.Domain.Entities
 
         public void ChangeName(string name)
         {
-            Name = name;
+            Name = name ?? throw new ArgumentNullException(nameof(name));
         }
-
-        public void ChangeRole(PocketRole role)
-        {
-            Role = role; 
-        }
-
-        public void ChangeDefaultBalanceSource(BalanceSource balanceSource)
-        {
-            DefaultBalanceSource = balanceSource;
-        }
-
-        public void ChangePlannedAmount(decimal plannedAmount)
-        {
-            PlannedAmount = plannedAmount; 
-        }
-
-        public void ChangeIsRecurring(bool isRecurring)
-        {
-            IsRecurring = isRecurring; 
-        }
+        public void ChangeRole(PocketRole role) => Role = role;
+        public void ChangeDefaultBalanceSource(BalanceSource balanceSource) => DefaultBalanceSource = balanceSource;
+        public void ChangePlannedAmount(decimal plannedAmount) => PlannedAmount = plannedAmount;
+        public void ChangeIsRecurring(bool isRecurring) => IsRecurring = isRecurring;
     }
 }

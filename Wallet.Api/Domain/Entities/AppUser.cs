@@ -20,7 +20,7 @@ namespace Wallet.Api.Domain.Entities
         }
 
         public Guid Id { get; private set; }
-        public string FirstName { get; set; }
+        public string FirstName { get; private set; }
 
         // Users starter pack
         public decimal BankLiquidity { get; set; }
@@ -41,5 +41,15 @@ namespace Wallet.Api.Domain.Entities
         // Navigation
         public ICollection<Wallet> Wallets { get; set; } = new List<Wallet>();
         public ICollection<Category> Categories { get; set; } = new List<Category>();
+
+        public void ChangeFirstName(string firstName)
+        {
+            FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName));
+        }
+
+        public void AdjustBankLiquidityBy(decimal delta) => BankLiquidity += delta; //delta => transaction.SignedAmount
+        public void AdjustCashLiquidityBy(decimal delta) => CashLiquidity += delta;
+        public void AdjustBankSavingsBy(decimal delta) => BankSavings += delta;
+        public void AdjustCashSavingsBy(decimal delta) => CashSavings += delta;
     }
 }
