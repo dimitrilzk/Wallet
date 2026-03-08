@@ -1,8 +1,9 @@
-﻿using Wallet.Api.Domain.Interfaces;
+﻿using Microsoft.AspNetCore.Identity;
+using Wallet.Api.Domain.Interfaces;
 
 namespace Wallet.Api.Domain.Entities
 {
-    public class AppUser : IEntity, IAuditable, ISoftDeletable
+    public class AppUser : IdentityUser<Guid>, IAuditable, ISoftDeletable
     {
         protected AppUser() { }
         public AppUser(string firstName,
@@ -11,7 +12,6 @@ namespace Wallet.Api.Domain.Entities
                        decimal bankSavings = 0m,
                        decimal cashSavings = 0m)
         {
-            Id = Guid.NewGuid();
             FirstName = firstName;
             BankLiquidity = bankLiquidity;
             CashLiquidity = cashLiquidity;
@@ -19,7 +19,6 @@ namespace Wallet.Api.Domain.Entities
             CashSavings = cashSavings;
         }
 
-        public Guid Id { get; private set; }
         public string FirstName { get; private set; }
 
         // Users starter pack
