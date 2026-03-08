@@ -3,10 +3,10 @@ using Wallet.Api.Domain.Interfaces;
 
 namespace Wallet.Api.Domain.Entities
 {
-    public class Wallet : IEntity, IAuditable, ISoftDeletable
+    public class AnnualWallet : IEntity, IAuditable, ISoftDeletable
     {
-        protected Wallet() { }
-        public Wallet(Guid userId, int year, WalletStatus walletStatus)
+        protected AnnualWallet() { }
+        public AnnualWallet(Guid userId, int year, WalletStatus walletStatus)
         {
             Id = Guid.NewGuid();
             UserId = userId;

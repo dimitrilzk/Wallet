@@ -9,7 +9,7 @@ namespace Wallet.Api.Infrastructure.Persistence
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        public DbSet<Domain.Entities.Wallet> Wallets { get; set; }
+        public DbSet<AnnualWallet> Wallets { get; set; }
         public DbSet<Pocket> Pocketes { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Category> Categories { get; set; }

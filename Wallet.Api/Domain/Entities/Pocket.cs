@@ -50,7 +50,7 @@ namespace Wallet.Api.Domain.Entities
         public DateTime? DeletedAt { get; set; }
 
         // Navigation
-        public Wallet Wallet { get; set; }
+        public AnnualWallet Wallet { get; set; }
         public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 
         public void ChangeName(string name)

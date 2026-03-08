@@ -38,7 +38,7 @@ namespace Wallet.Api.Domain.Entities
         public DateTime? DeletedAt { get; set; }
 
         // Navigation
-        public ICollection<Wallet> Wallets { get; set; } = new List<Wallet>();
+        public ICollection<AnnualWallet> Wallets { get; set; } = new List<AnnualWallet>();
         public ICollection<Category> Categories { get; set; } = new List<Category>();
 
         public void ChangeFirstName(string firstName)
