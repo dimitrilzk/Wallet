@@ -26,6 +26,7 @@ namespace Wallet.Api.Domain.Entities
         public decimal CashLiquidity { get; set; }
         public decimal BankSavings { get; set; }
         public decimal CashSavings { get; set; }
+        public decimal InvestedCapital { get; set; }
 
         // IAuditable
         public DateTime CreatedAt { get; set; }

@@ -13,8 +13,8 @@ namespace Wallet.Api.Domain.Entities
             string name,
             PocketRole role,
             BalanceSource defaultSource,
-            bool isRecurring = false,
-            decimal? plannedAmount = null)
+            bool isFixedBudget = false,
+            decimal? manualOverrideAmount = null)
         {
             Id = Guid.NewGuid();
             UserId = userId;
@@ -22,8 +22,8 @@ namespace Wallet.Api.Domain.Entities
             Name = name;
             Role = role;
             DefaultBalanceSource = defaultSource;
-            IsRecurring = isRecurring;
-            PlannedAmount = plannedAmount;
+            IsFixedBudget = isFixedBudget;
+            ManualOverrideAmount = manualOverrideAmount;
         }
 
         public Guid Id { get; private set; }
@@ -33,11 +33,12 @@ namespace Wallet.Api.Domain.Entities
         public string Name { get; private set; }
         public PocketRole Role { get; private set; } // Expense - Income - SavingGoal - Investment
         public BalanceSource DefaultBalanceSource { get; private set; } // BankLiquidity - CashLiquidity - BankSavings - CashSavings 
-        public decimal? PlannedAmount { get; private set; } // Budget pianificato/obbiettivo della pocket
-        public bool IsRecurring { get; private set; }
+        public bool IsFixedBudget { get; private set; } // UX: Segna questa pocket come Budget fisso se vuoi considerare il suo importo come un costo/risparmio fisso da togliere dal tuo reddito principale, a prescindere dalla somma precisa delle transazioni.
+        public decimal? ManualOverrideAmount { get; private set; } // Valore arrotondato e sovrascrivente del
 
         // Saldo attuale della pocket (derivato o mantenuto)
         public decimal CurrentBalance => Transactions?.Sum(t => t.SignedAmount) ?? 0m;
+        public decimal? EffectivePocketBalance => ManualOverrideAmount ?? CurrentBalance;
 
         // IAuditable
         public DateTime CreatedAt { get; set; }
@@ -59,7 +60,7 @@ namespace Wallet.Api.Domain.Entities
         }
         public void ChangeRole(PocketRole role) => Role = role;
         public void ChangeDefaultBalanceSource(BalanceSource balanceSource) => DefaultBalanceSource = balanceSource;
-        public void ChangePlannedAmount(decimal plannedAmount) => PlannedAmount = plannedAmount;
-        public void ChangeIsRecurring(bool isRecurring) => IsRecurring = isRecurring;
+        public void OverrideBudgetAmount(decimal overrideAmount) => ManualOverrideAmount = overrideAmount;
+        public void ChangeIsFixedBudget(bool isFixedBudget) => IsFixedBudget = isFixedBudget;
     }
 }

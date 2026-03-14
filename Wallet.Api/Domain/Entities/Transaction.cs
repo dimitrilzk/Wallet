@@ -12,6 +12,7 @@ namespace Wallet.Api.Domain.Entities
                            decimal amount,
                            bool isIncome,
                            DateTime transactionDate,
+                           bool isPrimaryIncome,
                            Guid? categoryId = null,
                            string? description = null)
         {
@@ -27,6 +28,7 @@ namespace Wallet.Api.Domain.Entities
             Amount = amount;
             IsIncome = isIncome;
             TransactionDate = transactionDate;
+            IsPrimaryIncome = isPrimaryIncome;
             CategoryId = categoryId;
             Description = description;
         }
@@ -38,6 +40,7 @@ namespace Wallet.Api.Domain.Entities
         public Guid? OriginalTransactionId { get; private set; }
 
         public BalanceSource ImpactedBalance { get; private set; } // BankLiquidity - CashLiquidity - BankSavings - CashSavings 
+        public bool IsPrimaryIncome { get; private set; }
         public decimal Amount { get; private set; } // sempre positivo
         public bool IsIncome { get; set; } // true = entrata, false = uscita
         public decimal SignedAmount => IsIncome ? Amount : -Amount;
@@ -80,6 +83,7 @@ namespace Wallet.Api.Domain.Entities
                                          refundAmount,
                                          isIncomeForRefund,
                                          refundDate,
+                                         false,
                                          CategoryId,
                                          refundDescription)
             {
@@ -93,5 +97,7 @@ namespace Wallet.Api.Domain.Entities
         public void ChangeDescription(string? description) => Description = description;
         public void ChangeImpactedBalance(BalanceSource balanceSource) => ImpactedBalance = balanceSource;
         public void ChangeAmount(decimal amount) => Amount = amount;
+        public void MarkAsPrimaryIncome() => IsPrimaryIncome = true;
+        public void UnmarkPrimaryIncome() => IsPrimaryIncome = false;
     }
 }
