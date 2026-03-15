@@ -22,9 +22,8 @@ builder.Services.AddIdentityCore<AppUser>(options =>
     options.Password.RequireUppercase = false;
     options.Password.RequireNonAlphanumeric = false;
 })
-    .AddRoles<IdentityRole<Guid>>()//adding roles
     .AddEntityFrameworkStores<AppDbContext>()//identity using dbContext to save users/roles
-    .AddDefaultTokenProviders();//reset passworda, 2FA
+    .AddDefaultTokenProviders();//reset password, 2FA
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
@@ -40,6 +39,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
