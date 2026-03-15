@@ -22,11 +22,11 @@ namespace Wallet.Api.Domain.Entities
         public string FirstName { get; private set; }
 
         // Users starter pack
-        public decimal BankLiquidity { get; set; }
-        public decimal CashLiquidity { get; set; }
-        public decimal BankSavings { get; set; }
-        public decimal CashSavings { get; set; }
-        public decimal InvestedCapital { get; set; }
+        public decimal BankLiquidity { get; private set; }
+        public decimal CashLiquidity { get; private set; }
+        public decimal BankSavings { get; private set; }
+        public decimal CashSavings { get; private set; }
+        public decimal InvestedCapital { get; private set; }
 
         // IAuditable
         public DateTime CreatedAt { get; set; }
@@ -51,5 +51,6 @@ namespace Wallet.Api.Domain.Entities
         public void AdjustCashLiquidityBy(decimal delta) => CashLiquidity += delta;
         public void AdjustBankSavingsBy(decimal delta) => BankSavings += delta;
         public void AdjustCashSavingsBy(decimal delta) => CashSavings += delta;
+        public void AdjustInvestedCapital(decimal delta) => InvestedCapital += delta;
     }
 }
