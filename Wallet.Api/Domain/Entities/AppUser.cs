@@ -40,6 +40,7 @@ namespace Wallet.Api.Domain.Entities
 
         // Navigation
         public ICollection<AnnualWallet> Wallets { get; set; } = new List<AnnualWallet>();
+        public ICollection<Pocket> Pockets { get; set; } = new List<Pocket>(); 
         public ICollection<Category> Categories { get; set; } = new List<Category>();
 
         public void ChangeFirstName(string firstName)

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Sockets;
 using Wallet.Api.Domain.Entities;
 
 namespace Wallet.Api.Infrastructure.Persistence
@@ -50,6 +51,10 @@ namespace Wallet.Api.Infrastructure.Persistence
                   .WithMany(u => u.Wallets)
                   .HasForeignKey(w => w.UserId)
                   .OnDelete(DeleteBehavior.Cascade);// AppUser principal
+
+                // Unique constraint (UserId, Year)
+                w.HasIndex(w => new { w.UserId, w.Year })
+                  .IsUnique();
             });
             // Pocket
             builder.Entity<Pocket>(p =>
@@ -68,11 +73,20 @@ namespace Wallet.Api.Infrastructure.Persistence
                 p.Property(p => p.DefaultBalanceSource)
                  .IsRequired();
 
-                // relazione 1 (lWallet) : N (Pocket)
+                // relazione 1 (Wallet) : N (Pocket)
                 p.HasOne(x => x.Wallet)
                  .WithMany(w => w.Pockets)
                  .HasForeignKey(x => x.WalletId)
                  .OnDelete(DeleteBehavior.Cascade);// Wallet principal
+
+                // 1 (User) : N (Pocket)
+                p.HasOne(p => p.User)
+                 .WithMany(u => u.Pockets)
+                 .HasForeignKey(p => p.UserId)
+                 .OnDelete(DeleteBehavior.Cascade);// User principal
+                // Name unico per wallet
+                p.HasIndex(p => new { p.WalletId, p.Name })
+                 .IsUnique();
             });
             // Transaction
             builder.Entity<Transaction>(t =>
@@ -106,7 +120,7 @@ namespace Wallet.Api.Infrastructure.Persistence
                 t.HasOne(t => t.OriginalTransaction)
                  .WithMany(o => o.Refunds)
                  .HasForeignKey(t => t.OriginalTransactionId)
-                 .OnDelete(DeleteBehavior.Restrict);// OriginalTransaction principal
+                 .OnDelete(DeleteBehavior.Cascade);// OriginalTransaction principal
             });
             // Category
             builder.Entity<Category>(c =>
@@ -130,6 +144,9 @@ namespace Wallet.Api.Infrastructure.Persistence
                  .WithMany(c => c.Subcategories)
                  .HasForeignKey(c => c.ParentCategoryId)
                  .OnDelete(DeleteBehavior.Restrict); // Categories principal
+                // Name unico per User
+                c.HasIndex(c => new { c.UserId, c.Name })
+                 .IsUnique();
             });
         }
     }
