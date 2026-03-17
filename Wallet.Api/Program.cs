@@ -1,6 +1,10 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
+using System.Text;
+using System.Text.Unicode;
 using Wallet.Api.Domain.Entities;
 using Wallet.Api.Infrastructure.Persistence;
 
@@ -24,6 +28,38 @@ builder.Services.AddIdentityCore<AppUser>(options =>
 })
     .AddEntityFrameworkStores<AppDbContext>()//identity using dbContext to save users/roles
     .AddDefaultTokenProviders();//reset password, 2FA
+
+//JWT
+var jwtSettings = builder.Configuration.GetSection("Jwt");
+
+var signingKey = jwtSettings["SigningKey"];
+if (string.IsNullOrWhiteSpace(signingKey))
+{
+    throw new InvalidOperationException("JWT SigningKey is not configured.");
+}
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateIssuerSigningKey = true,
+            ValidateLifetime = true,
+
+            ValidIssuer = jwtSettings["Issuer"],
+            ValidAudience = jwtSettings["Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signingKey!)),
+            ClockSkew = TimeSpan.FromMinutes(1)
+        };
+    });
+
+builder.Services.AddAuthorization();
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
