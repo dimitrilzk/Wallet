@@ -4,8 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using System.Text;
-using System.Text.Unicode;
+using Wallet.Api.Application.Auth;
+using Wallet.Api.Configuration;
 using Wallet.Api.Domain.Entities;
+using Wallet.Api.Infrastructure.Auth;
 using Wallet.Api.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,13 +32,14 @@ builder.Services.AddIdentityCore<AppUser>(options =>
     .AddDefaultTokenProviders();//reset password, 2FA
 
 //JWT
-var jwtSettings = builder.Configuration.GetSection("Jwt");
+builder.Services.AddOptions<JwtOptions>()
+    .Bind(builder.Configuration.GetSection(JwtOptions.SectionName))
+    .Validate(options => !string.IsNullOrWhiteSpace(options.SigningKey), "Jwt:SigningKey must be provided.")
+    .ValidateOnStart();
 
-var signingKey = jwtSettings["SigningKey"];
-if (string.IsNullOrWhiteSpace(signingKey))
-{
-    throw new InvalidOperationException("JWT SigningKey is not configured.");
-}
+var jwtOptions = builder.Configuration
+    .GetSection(JwtOptions.SectionName)
+    .Get<JwtOptions>() ?? throw new InvalidOperationException("Jwt configuration section is missing.");
 
 builder.Services.AddAuthentication(options =>
 {
@@ -52,12 +55,14 @@ builder.Services.AddAuthentication(options =>
             ValidateIssuerSigningKey = true,
             ValidateLifetime = true,
 
-            ValidIssuer = jwtSettings["Issuer"],
-            ValidAudience = jwtSettings["Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signingKey!)),
+            ValidIssuer = jwtOptions.Issuer,
+            ValidAudience = jwtOptions.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SigningKey!)),
             ClockSkew = TimeSpan.FromMinutes(1)
         };
     });
+
+builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
 builder.Services.AddAuthorization();
 
