@@ -36,6 +36,8 @@ namespace Wallet.Api.Controllers
             }
 
             var user = new AppUser(request.FirstName);
+            user.UserName = request.Email;
+            user.Email = request.Email;
 
             var result = await userManager.CreateAsync(user, request.Password);
 

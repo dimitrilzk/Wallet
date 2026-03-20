@@ -27,6 +27,11 @@ builder.Services.AddIdentityCore<AppUser>(options =>
     options.Password.RequiredLength = 8;
     options.Password.RequireUppercase = false;
     options.Password.RequireNonAlphanumeric = false;
+
+    options.User.RequireUniqueEmail = true;
+
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
 })
     .AddEntityFrameworkStores<AppDbContext>()//identity using dbContext to save users/roles
     .AddDefaultTokenProviders();//reset password, 2FA
