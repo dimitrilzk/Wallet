@@ -46,6 +46,7 @@ var jwtOptions = builder.Configuration
     .GetSection(JwtOptions.SectionName)
     .Get<JwtOptions>() ?? throw new InvalidOperationException("Jwt configuration section is missing.");
 
+//AUTH
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
