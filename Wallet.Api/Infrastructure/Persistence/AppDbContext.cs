@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Net.Sockets;
 using Wallet.Api.Domain.Entities;
 
 namespace Wallet.Api.Infrastructure.Persistence
