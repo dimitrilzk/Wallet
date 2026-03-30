@@ -46,6 +46,7 @@ namespace Wallet.Api.Application.Services
 
             return new WalletResponseDto
             {
+                Id = wallet.Id,
                 Year = wallet.Year,
                 WalletStatus = wallet.WalletStatus,
                 Pockets = wallet.Pockets.ToList() //TODO dto per le pocket meglio non esporre l'entity completa
