@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using System.Text;
 using Wallet.Api.Application.Auth;
+using Wallet.Api.Application.Interfaces;
 using Wallet.Api.Configuration;
 using Wallet.Api.Domain.Entities;
 using Wallet.Api.Infrastructure.Auth;
@@ -69,6 +70,7 @@ builder.Services.AddAuthentication(options =>
     });
 
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 builder.Services.AddAuthorization();
 
