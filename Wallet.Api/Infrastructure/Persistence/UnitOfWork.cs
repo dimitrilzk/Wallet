@@ -1,4 +1,6 @@
-﻿using Wallet.Api.Application.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using Wallet.Api.Application.Interfaces;
+using Wallet.Api.Domain.Interfaces;
 
 namespace Wallet.Api.Infrastructure.Persistence
 {
@@ -7,17 +9,50 @@ namespace Wallet.Api.Infrastructure.Persistence
         private readonly AppDbContext dbContext;
         private readonly ICurrentUserService currentUserService;
 
-        public UnitOfWork(AppDbContext dbContext)
+        public UnitOfWork(AppDbContext dbContext, ICurrentUserService currentUserService)
         {
             this.dbContext = dbContext;
+            this.currentUserService = currentUserService;
         }
 
-        public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            foreach (var entity in dbContext.ChangeTracker)
-            {
+            var userId = currentUserService.UserId;
+            var entities = dbContext.ChangeTracker.Entries<IAuditable>()
+                .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified)
+                .ToList();
 
+            foreach (var entity in entities)
+            {
+                var auditable = entity.Entity;
+
+                if (entity.State == EntityState.Added)
+                {
+                    if (auditable.CreatedAt == default)
+                    {
+                        auditable.CreatedAt = DateTime.UtcNow;
+                        auditable.UpdatedAt = auditable.CreatedAt;
+                    }
+
+                    if (auditable.CreatedBy is null && userId is not null)
+                    {
+                        auditable.CreatedBy = userId;
+                        auditable.UpdatedBy = auditable.CreatedBy;
+                    }
+                }
+
+                if (entity.State == EntityState.Modified)
+                {
+                    auditable.UpdatedAt = DateTime.UtcNow;
+
+                    if (userId is not null)
+                    {
+                        auditable.UpdatedBy = userId;
+                    }
+                }
             }
+
+            return await dbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }

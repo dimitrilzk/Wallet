@@ -15,8 +15,29 @@ namespace Wallet.Api.Infrastructure.Auth
         {
             get
             {
-                var calim = httpContextAccessor?.HttpContext?.User.FindFirst("sub")?.Value;
+                var cntxt = httpContextAccessor.HttpContext;
 
+                if (cntxt is null || cntxt.User is null || cntxt.User.Identity is null || !cntxt.User.Identity.IsAuthenticated)
+                {
+                    return null;
+                }
+
+                var user = cntxt.User;
+                var value = user.FindFirst("sub")?.Value;
+                
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    return null;
+                }
+
+                if (Guid.TryParse(value, out var id))
+                {
+                    return id;
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
     }

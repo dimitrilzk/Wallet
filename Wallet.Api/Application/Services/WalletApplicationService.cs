@@ -2,19 +2,18 @@
 using Wallet.Api.Domain.Entities;
 using Wallet.Api.Domain.Enums;
 using Wallet.Api.DTOs.Wallet;
-using Wallet.Api.Infrastructure.Persistence;
 
 namespace Wallet.Api.Application.Services
 {
     public class WalletApplicationService
     {
         private readonly IWalletRepository walletRepository;
-        private readonly AppDbContext dbContext;
+        private readonly IUnitOfWork unitOfWork;
 
-        public WalletApplicationService(IWalletRepository walletRepository, AppDbContext dbContext)
+        public WalletApplicationService(IWalletRepository walletRepository, IUnitOfWork unitOfWork)
         {
             this.walletRepository = walletRepository;
-            this.dbContext = dbContext;
+            this.unitOfWork = unitOfWork;
         }
 
         public async Task<WalletResponseDto> GetOrCreateWalletAsync(Guid userId, int year)
@@ -41,7 +40,7 @@ namespace Wallet.Api.Application.Services
                 wallet = new AnnualWallet(userId, year, wStatus);
 
                 await walletRepository.AddAsync(wallet);
-                await dbContext.SaveChangesAsync();
+                await unitOfWork.SaveChangesAsync();
             }
 
             return new WalletResponseDto
