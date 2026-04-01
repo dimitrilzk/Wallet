@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+﻿using Wallet.Api.Application.Extensions;
 using Wallet.Api.Application.Interfaces;
 
 namespace Wallet.Api.Infrastructure.Auth
@@ -23,22 +23,7 @@ namespace Wallet.Api.Infrastructure.Auth
                     return null;
                 }
 
-                var user = cntxt.User;
-                var value = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    return null;
-                }
-
-                if (Guid.TryParse(value, out var id))
-                {
-                    return id;
-                }
-                else
-                {
-                    return null;
-                }
+                return cntxt.User.GetUserIdOrNull();
             }
         }
     }
