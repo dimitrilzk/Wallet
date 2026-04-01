@@ -26,7 +26,7 @@ namespace Wallet.Api.Infrastructure.Auth
 
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()), // subject
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()), // NameIdentifier
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), //JWT ID
                 new Claim(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty),
                 new Claim("name", user.FirstName ?? string.Empty)

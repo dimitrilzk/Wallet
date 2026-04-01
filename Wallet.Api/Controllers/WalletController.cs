@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Wallet.Api.Application.Extensions;
-using Wallet.Api.Application.Services;
+using Wallet.Api.Application.Interfaces;
 using Wallet.Api.DTOs.Wallet;
 
 namespace Wallet.Api.Controllers
@@ -10,9 +10,9 @@ namespace Wallet.Api.Controllers
     [Route("api/[controller]")]
     public class WalletController : ControllerBase
     {
-        private readonly WalletApplicationService walletService;
+        private readonly IWalletApplicationService walletService;
 
-        public WalletController(WalletApplicationService walletService)//TODO In ottica più pulita potrei in futuro dipendere da un’interfaccia
+        public WalletController(IWalletApplicationService walletService)
         {
             this.walletService = walletService;
         }

@@ -5,7 +5,7 @@ using Wallet.Api.DTOs.Wallet;
 
 namespace Wallet.Api.Application.Services
 {
-    public class WalletApplicationService
+    public class WalletApplicationService : IWalletApplicationService
     {
         private readonly IWalletRepository walletRepository;
         private readonly IUnitOfWork unitOfWork;

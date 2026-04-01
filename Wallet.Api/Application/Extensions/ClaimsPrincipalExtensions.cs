@@ -6,16 +6,16 @@ namespace Wallet.Api.Application.Extensions
     {
         public static Guid GetUserId(this ClaimsPrincipal user)
         {
-            var value = user.FindFirst("sub")?.Value;
+            var value = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             if (string.IsNullOrWhiteSpace(value))
             {
-                throw new ArgumentException("User id claim 'sub' was not found in the current principal.");
+                throw new ArgumentException("User id claim was not found in the current principal.");
             }
 
             if (!Guid.TryParse(value, out var userId))
             {
-                throw new InvalidOperationException("Claim 'sub' is not a valid Guid");
+                throw new InvalidOperationException("User id claim is not a valid Guid.");
             }
 
             return userId;

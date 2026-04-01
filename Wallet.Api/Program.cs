@@ -6,14 +6,14 @@ using Scalar.AspNetCore;
 using System.Text;
 using Wallet.Api.Application.Auth;
 using Wallet.Api.Application.Interfaces;
+using Wallet.Api.Application.Services;
 using Wallet.Api.Configuration;
 using Wallet.Api.Domain.Entities;
 using Wallet.Api.Infrastructure.Auth;
 using Wallet.Api.Infrastructure.Persistence;
+using Wallet.Api.Infrastructure.Persistence.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
 
 //DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -73,6 +73,8 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+builder.Services.AddScoped<IWalletRepository, WalletRepository>();
+builder.Services.AddScoped<IWalletApplicationService, WalletApplicationService>();
 
 builder.Services.AddAuthorization();
 
