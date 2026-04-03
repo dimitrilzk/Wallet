@@ -6,7 +6,7 @@ namespace Wallet.Api.Domain.Entities
     public class AnnualWallet : IEntity, IAuditable, ISoftDeletable
     {
         protected AnnualWallet() { }
-        public AnnualWallet(Guid userId, int year, WalletStatus walletStatus)
+        private AnnualWallet(Guid userId, int year, WalletStatus walletStatus)
         {
             Id = Guid.NewGuid();
             UserId = userId;
@@ -30,10 +30,37 @@ namespace Wallet.Api.Domain.Entities
         public DateTime? DeletedAt { get; set; }
 
         // Navigation
-        public AppUser User { get; set; }
-        public ICollection<Pocket> Pockets { get; set; } = new List<Pocket>();
+        public AppUser User { get; private set; }
+        public ICollection<Pocket> Pockets { get; private set; } = new List<Pocket>();
 
-        public void ChangeYear(int newYear) => Year = newYear;
-        public void ChangeStatus(WalletStatus walletStatus) => WalletStatus = walletStatus;
+        public void RefreshStatus()
+        {
+            WalletStatus = ResolveStatusForYear(Year);
+        }
+
+        public static AnnualWallet CreateForYear(Guid userId, int year)
+        {
+            return new AnnualWallet(userId, year, ResolveStatusForYear(year));
+        }
+
+        private static WalletStatus ResolveStatusForYear(int year)
+        {
+            WalletStatus wStatus = WalletStatus.Planned;
+
+            if (year == DateTime.UtcNow.Year)
+            {
+                wStatus = WalletStatus.Active;
+            }
+            else if (year > DateTime.UtcNow.Year)
+            {
+                wStatus = WalletStatus.Planned;
+            }
+            else if (year < DateTime.UtcNow.Year)
+            {
+                wStatus = WalletStatus.Closed;
+            }
+
+            return wStatus;
+        }
     }
 }

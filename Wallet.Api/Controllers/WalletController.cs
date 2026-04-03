@@ -18,19 +18,26 @@ namespace Wallet.Api.Controllers
         }
 
         [Authorize]
-        [HttpPost("current")]
+        [HttpGet("current")]
         [ProducesResponseType(typeof(WalletResponseDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> GetOrCreateWallet([FromBody] WalletRequestDto request)
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetOrCreateCurrentWallet()
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             var userId = User.GetUserId();
-            var resp = await walletService.GetOrCreateWalletAsync(userId, request.Year);
+            var resp = await walletService.GetOrCreateWalletAsync(userId, DateTime.UtcNow.Year);
+            return Ok(resp);
+        }
+
+        [Authorize]
+        [HttpGet("{year}")]
+        [ProducesResponseType(typeof(WalletResponseDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetOrCreateWalletByYear([FromRoute] int year)
+        {
+            var userId = User.GetUserId();
+            var resp = await walletService.GetOrCreateWalletAsync(userId, year);
             return Ok(resp);
         }
     }

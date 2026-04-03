@@ -1,6 +1,5 @@
 ﻿using Wallet.Api.Application.Interfaces;
 using Wallet.Api.Domain.Entities;
-using Wallet.Api.Domain.Enums;
 using Wallet.Api.DTOs.Wallet;
 
 namespace Wallet.Api.Application.Services
@@ -20,24 +19,9 @@ namespace Wallet.Api.Application.Services
         {
             var wallet = await walletRepository.GetByUserAndYearAsync(userId, year);
 
-            if (wallet == null)
+            if (wallet is null)
             {
-                WalletStatus wStatus = WalletStatus.Planned;
-
-                if (year == DateTime.UtcNow.Year)
-                {
-                    wStatus = WalletStatus.Active;
-                }
-                else if (year > DateTime.UtcNow.Year)
-                {
-                    wStatus = WalletStatus.Planned;
-                }
-                else if (year < DateTime.UtcNow.Year)
-                {
-                    wStatus = WalletStatus.Closed;
-                }
-
-                wallet = new AnnualWallet(userId, year, wStatus);
+                wallet = AnnualWallet.CreateForYear(userId, year);
 
                 await walletRepository.AddAsync(wallet);
                 await unitOfWork.SaveChangesAsync();
