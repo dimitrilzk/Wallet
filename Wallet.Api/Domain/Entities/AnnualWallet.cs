@@ -33,11 +33,6 @@ namespace Wallet.Api.Domain.Entities
         public AppUser User { get; private set; }
         public ICollection<Pocket> Pockets { get; private set; } = new List<Pocket>();
 
-        public void RefreshStatus()
-        {
-            WalletStatus = ResolveStatusForYear(Year);
-        }
-
         public static AnnualWallet CreateForYear(Guid userId, int year)
         {
             return new AnnualWallet(userId, year, ResolveStatusForYear(year));
