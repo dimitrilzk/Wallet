@@ -31,6 +31,8 @@ namespace Wallet.Api.Infrastructure.Persistence
                 u.Property(u => u.BankSavings).HasColumnType("numeric(18,2)");
                 u.Property(u => u.CashSavings).HasColumnType("numeric(18,2)");
                 u.Property(u => u.InvestedCapital).HasColumnType("numeric(18,2)");
+
+                u.HasQueryFilter(u => u.IsDeleted == false);
             });
             // Wallet
             builder.Entity<AnnualWallet>(w =>
@@ -54,6 +56,8 @@ namespace Wallet.Api.Infrastructure.Persistence
                 // Unique constraint (UserId, Year)
                 w.HasIndex(w => new { w.UserId, w.Year })
                   .IsUnique();
+
+                w.HasQueryFilter(w => w.IsDeleted == false);
             });
             // Pocket
             builder.Entity<Pocket>(p =>
@@ -86,6 +90,8 @@ namespace Wallet.Api.Infrastructure.Persistence
                 // Name unico per wallet
                 p.HasIndex(p => new { p.WalletId, p.Name })
                  .IsUnique();
+
+                p.HasQueryFilter(p => p.IsDeleted == false);
             });
             // Transaction
             builder.Entity<Transaction>(t =>
@@ -120,6 +126,8 @@ namespace Wallet.Api.Infrastructure.Persistence
                  .WithMany(o => o.Refunds)
                  .HasForeignKey(t => t.OriginalTransactionId)
                  .OnDelete(DeleteBehavior.Cascade);// OriginalTransaction principal
+
+                t.HasQueryFilter(t => t.IsDeleted == false);
             });
             // Category
             builder.Entity<Category>(c =>
@@ -146,6 +154,8 @@ namespace Wallet.Api.Infrastructure.Persistence
                 // Name unico per User
                 c.HasIndex(c => new { c.UserId, c.Name })
                  .IsUnique();
+
+                c.HasQueryFilter(c => c.IsDeleted == false);
             });
         }
     }

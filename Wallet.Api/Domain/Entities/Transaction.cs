@@ -16,16 +16,11 @@ namespace Wallet.Api.Domain.Entities
                            Guid? categoryId = null,
                            string? description = null)
         {
-            if (amount <= 0)
-            {
-                throw new ArgumentException("Amount must be positive.", nameof(amount));
-            }
-
             Id = Guid.NewGuid();
             UserId = userId;
             PocketId = pocketId;
             ImpactedBalance = impactedBalance;
-            Amount = amount;
+            ChangeAmount(amount);
             IsIncome = isIncome;
             TransactionDate = transactionDate;
             IsPrimaryIncome = isPrimaryIncome;
@@ -42,11 +37,11 @@ namespace Wallet.Api.Domain.Entities
         public BalanceSource ImpactedBalance { get; private set; } // BankLiquidity - CashLiquidity - BankSavings - CashSavings 
         public bool IsPrimaryIncome { get; private set; }
         public decimal Amount { get; private set; } // sempre positivo
-        public bool IsIncome { get; set; } // true = entrata, false = uscita
+        public bool IsIncome { get; private set; } // true = entrata, false = uscita
         public decimal SignedAmount => IsIncome ? Amount : -Amount;
 
-        public string? Description { get; set; }
-        public DateTime TransactionDate { get; set; }
+        public string? Description { get; private set; }
+        public DateTime TransactionDate { get; private set; }
 
         // IAuditable
         public DateTime CreatedAt { get; set; }
@@ -70,18 +65,11 @@ namespace Wallet.Api.Domain.Entities
                                         string? refundDescription = null,
                                         BalanceSource? refundBalanceSourceOverride = null)
         {
-            if (refundAmount <= 0)
-            {
-                throw new ArgumentException("Refund amount must be positive.", nameof(refundAmount));
-            }
-
-            var isIncomeForRefund = !IsIncome;
-
             var refund = new Transaction(UserId,
                                          PocketId,
                                          refundBalanceSourceOverride ?? ImpactedBalance,
                                          refundAmount,
-                                         isIncomeForRefund,
+                                         !IsIncome,//NB
                                          refundDate,
                                          false,
                                          CategoryId,
@@ -93,10 +81,32 @@ namespace Wallet.Api.Domain.Entities
             return refund;
         }
 
+        public void ChangeTransactionDate(DateTime? transactionDate)
+        {
+            if (transactionDate == null)
+            {
+                throw new ArgumentNullException(nameof(transactionDate));
+            }
+            else
+            {
+                TransactionDate = transactionDate.Value;
+            }
+        }
+
+        public void ChangeAmount(decimal amount)
+        {
+            if (amount <= 0)
+            {
+                throw new ArgumentException("Amount must be positive.", nameof(amount));
+            }
+
+            Amount = amount;
+        }
+
+        public void ChangeIsIncome(bool isIncome) => IsIncome = isIncome;
         public void ChangeCategory(Guid? categoryId) => CategoryId = categoryId;
         public void ChangeDescription(string? description) => Description = description;
         public void ChangeImpactedBalance(BalanceSource balanceSource) => ImpactedBalance = balanceSource;
-        public void ChangeAmount(decimal amount) => Amount = amount;
         public void MarkAsPrimaryIncome() => IsPrimaryIncome = true;
         public void UnmarkPrimaryIncome() => IsPrimaryIncome = false;
     }
