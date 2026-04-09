@@ -8,7 +8,6 @@ namespace Wallet.Api.Domain.Entities
         protected Pocket() { }
 
         public Pocket(
-            Guid userId,
             Guid walletId,
             string name,
             PocketRole role,
@@ -17,7 +16,6 @@ namespace Wallet.Api.Domain.Entities
             decimal? manualOverrideAmount = null)
         {
             Id = Guid.NewGuid();
-            UserId = userId;
             WalletId = walletId;
             Name = name;
             Role = role;
@@ -27,7 +25,6 @@ namespace Wallet.Api.Domain.Entities
         }
 
         public Guid Id { get; private set; }
-        public Guid UserId { get; private set; }
         public Guid WalletId { get; private set; }
 
         public string Name { get; private set; }
@@ -51,8 +48,6 @@ namespace Wallet.Api.Domain.Entities
         public DateTime? DeletedAt { get; set; }
 
         // Navigation
-        public AppUser User { get; set; }
-        public AnnualWallet Wallet { get; set; }
         public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 
         public void ChangeName(string name)

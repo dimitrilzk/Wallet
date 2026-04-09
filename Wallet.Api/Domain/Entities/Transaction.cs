@@ -6,8 +6,7 @@ namespace Wallet.Api.Domain.Entities
     public class Transaction : IEntity, IAuditable, ISoftDeletable
     {
         protected Transaction() { }
-        public Transaction(Guid userId,
-                           Guid pocketId,
+        public Transaction(Guid pocketId,
                            BalanceSource impactedBalance,
                            decimal amount,
                            bool isIncome,
@@ -17,7 +16,6 @@ namespace Wallet.Api.Domain.Entities
                            string? description = null)
         {
             Id = Guid.NewGuid();
-            UserId = userId;
             PocketId = pocketId;
             ImpactedBalance = impactedBalance;
             ChangeAmount(amount);
@@ -29,15 +27,14 @@ namespace Wallet.Api.Domain.Entities
         }
 
         public Guid Id { get; private set; }
-        public Guid UserId { get; private set; }
         public Guid PocketId { get; private set; }
         public Guid? CategoryId { get; private set; }
         public Guid? OriginalTransactionId { get; private set; }
 
-        public BalanceSource ImpactedBalance { get; private set; } // BankLiquidity - CashLiquidity - BankSavings - CashSavings 
         public bool IsPrimaryIncome { get; private set; }
-        public decimal Amount { get; private set; } // sempre positivo
         public bool IsIncome { get; private set; } // true = entrata, false = uscita
+        public BalanceSource ImpactedBalance { get; private set; } // BankLiquidity - CashLiquidity - BankSavings - CashSavings 
+        public decimal Amount { get; private set; } // sempre positivo
         public decimal SignedAmount => IsIncome ? Amount : -Amount;
 
         public string? Description { get; private set; }
@@ -54,8 +51,6 @@ namespace Wallet.Api.Domain.Entities
         public DateTime? DeletedAt { get; set; }
 
         // Navigation
-        public Pocket Pocket { get; set; }
-        public Category? Category { get; set; }
         public Transaction? OriginalTransaction { get; set; }
         public ICollection<Transaction> Refunds { get; set; } = new List<Transaction>();
 
@@ -65,8 +60,7 @@ namespace Wallet.Api.Domain.Entities
                                         string? refundDescription = null,
                                         BalanceSource? refundBalanceSourceOverride = null)
         {
-            var refund = new Transaction(UserId,
-                                         PocketId,
+            var refund = new Transaction(PocketId,
                                          refundBalanceSourceOverride ?? ImpactedBalance,
                                          refundAmount,
                                          !IsIncome,//NB

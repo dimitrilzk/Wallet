@@ -32,10 +32,8 @@ namespace Wallet.Api.Domain.Entities
         public DateTime? DeletedAt { get; set; }
 
         // Navigation
-        public AppUser? User { get; set; }
         public Category? ParentCategory { get; set; }
         public ICollection<Category> Subcategories { get; set; } = new List<Category>();
-        public ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 
         // DOMAIN METHODS
         public void ChangeName(string name)

@@ -30,7 +30,6 @@ namespace Wallet.Api.Domain.Entities
         public DateTime? DeletedAt { get; set; }
 
         // Navigation
-        public AppUser User { get; private set; }
         public ICollection<Pocket> Pockets { get; private set; } = new List<Pocket>();
 
         public static AnnualWallet CreateForYear(Guid userId, int year)

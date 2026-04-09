@@ -6,27 +6,12 @@ namespace Wallet.Api.Domain.Entities
     public class AppUser : IdentityUser<Guid>, IAuditable, ISoftDeletable
     {
         protected AppUser() { }
-        public AppUser(string firstName,
-                       decimal bankLiquidity = 0m,
-                       decimal cashLiquidity = 0m,
-                       decimal bankSavings = 0m,
-                       decimal cashSavings = 0m)
+        public AppUser(string firstName)
         {
             FirstName = firstName;
-            BankLiquidity = bankLiquidity;
-            CashLiquidity = cashLiquidity;
-            BankSavings = bankSavings;
-            CashSavings = cashSavings;
         }
 
         public string FirstName { get; private set; }
-
-        // Users starter pack
-        public decimal BankLiquidity { get; private set; }
-        public decimal CashLiquidity { get; private set; }
-        public decimal BankSavings { get; private set; }
-        public decimal CashSavings { get; private set; }
-        public decimal InvestedCapital { get; private set; }
 
         // IAuditable
         public DateTime CreatedAt { get; set; }
@@ -38,20 +23,9 @@ namespace Wallet.Api.Domain.Entities
         public bool IsDeleted { get; set; }
         public DateTime? DeletedAt { get; set; }
 
-        // Navigation
-        public ICollection<AnnualWallet> Wallets { get; set; } = new List<AnnualWallet>();
-        public ICollection<Pocket> Pockets { get; set; } = new List<Pocket>(); 
-        public ICollection<Category> Categories { get; set; } = new List<Category>();
-
         public void ChangeFirstName(string firstName)
         {
             FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName));
         }
-
-        public void AdjustBankLiquidityBy(decimal delta) => BankLiquidity += delta; //delta => transaction.SignedAmount
-        public void AdjustCashLiquidityBy(decimal delta) => CashLiquidity += delta;
-        public void AdjustBankSavingsBy(decimal delta) => BankSavings += delta;
-        public void AdjustCashSavingsBy(decimal delta) => CashSavings += delta;
-        public void AdjustInvestedCapital(decimal delta) => InvestedCapital += delta;
     }
 }
