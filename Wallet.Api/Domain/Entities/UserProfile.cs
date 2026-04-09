@@ -2,23 +2,26 @@
 
 namespace Wallet.Api.Domain.Entities
 {
-    public class UserProfile : IAuditable, ISoftDeletable
+    public class UserProfile : IEntity, IAuditable, ISoftDeletable
     {
         protected UserProfile() { }
-        public UserProfile(decimal bankLiquidity = 0m,
+        public UserProfile(Guid userId,
+                           decimal bankLiquidity = 0m,
                            decimal cashLiquidity = 0m,
                            decimal bankSavings = 0m,
                            decimal cashSavings = 0m,
                            decimal investedCapital = 0m)
         {
+            Id = Guid.NewGuid();
+            UserId = userId;
             BankLiquidity = bankLiquidity;
             CashLiquidity = cashLiquidity;
             BankSavings = bankSavings;
             CashSavings = cashSavings;
             InvestedCapital = investedCapital;
         }
-        public Guid Id { get; set; }
-        public Guid UserId { get; set; }
+        public Guid Id { get; private set; }
+        public Guid UserId { get; private set; }
 
         public decimal BankLiquidity { get; private set; }
         public decimal CashLiquidity { get; private set; }
