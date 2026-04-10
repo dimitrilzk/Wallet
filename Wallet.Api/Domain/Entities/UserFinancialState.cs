@@ -2,10 +2,10 @@
 
 namespace Wallet.Api.Domain.Entities
 {
-    public class UserProfile : IEntity, IAuditable, ISoftDeletable
+    public class UserFinancialState : IEntity, IAuditable, ISoftDeletable
     {
-        protected UserProfile() { }
-        public UserProfile(Guid userId,
+        protected UserFinancialState() { }
+        public UserFinancialState(Guid userId,
                            decimal bankLiquidity = 0m,
                            decimal cashLiquidity = 0m,
                            decimal bankSavings = 0m,
