@@ -34,8 +34,6 @@ namespace Wallet.Api.Infrastructure.Persistence
             {
                 w.ToTable("Wallets");
 
-                w.HasKey(w => w.Id);
-
                 w.Property(w => w.Year)
                     .IsRequired();
 
@@ -53,8 +51,6 @@ namespace Wallet.Api.Infrastructure.Persistence
             {
                 p.ToTable("Pockets");
 
-                p.HasKey(p => p.Id);
-
                 p.Property(p => p.Name)
                  .IsRequired()
                  .HasMaxLength(100);
@@ -71,8 +67,6 @@ namespace Wallet.Api.Infrastructure.Persistence
             builder.Entity<Transaction>(t =>
             {
                 t.ToTable("Transactions");
-
-                t.HasKey(t => t.Id);
 
                 t.Property(t => t.Amount)
                  .IsRequired();
@@ -96,8 +90,6 @@ namespace Wallet.Api.Infrastructure.Persistence
             {
                 c.ToTable("Categories");
 
-                c.HasKey(c => c.Id);
-
                 c.Property(c => c.Name)
                  .IsRequired()
                  .HasMaxLength(100);
@@ -117,8 +109,6 @@ namespace Wallet.Api.Infrastructure.Persistence
             builder.Entity<UserFinancialState>(u =>
             {
                 u.ToTable("UserFinancialStates");
-
-                u.HasKey(u => u.Id);
 
                 u.Property(u => u.BankLiquidity).HasColumnType("numeric(18,2)");
                 u.Property(u => u.CashLiquidity).HasColumnType("numeric(18,2)");
