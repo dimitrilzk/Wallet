@@ -29,6 +29,26 @@ namespace Wallet.Api.Infrastructure.Persistence
 
                 u.HasQueryFilter(u => u.IsDeleted == false);
             });
+            // UserFinancialState
+            builder.Entity<UserFinancialState>(u =>
+            {
+                u.ToTable("UserFinancialStates");
+
+                u.Property(u => u.BankLiquidity).HasColumnType("numeric(18,2)");
+                u.Property(u => u.CashLiquidity).HasColumnType("numeric(18,2)");
+                u.Property(u => u.BankSavings).HasColumnType("numeric(18,2)");
+                u.Property(u => u.CashSavings).HasColumnType("numeric(18,2)");
+                u.Property(u => u.InvestedCapital).HasColumnType("numeric(18,2)");
+
+                u.HasOne<AppUser>()
+                .WithOne()
+                .HasForeignKey<UserFinancialState>(uf => uf.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+                u.HasIndex(u => u.UserId).IsUnique();
+
+                u.HasQueryFilter(u => u.IsDeleted == false);
+            });
             // Wallet
             builder.Entity<AnnualWallet>(w =>
             {
@@ -39,6 +59,16 @@ namespace Wallet.Api.Infrastructure.Persistence
 
                 w.Property(w => w.WalletStatus)
                     .IsRequired();
+
+                w.HasOne<AppUser>()
+                .WithMany()
+                .HasForeignKey(w => w.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+                w.HasMany(w => w.Pockets)
+                .WithOne()
+                .HasForeignKey(p => p.WalletId)
+                .OnDelete(DeleteBehavior.Cascade);
 
                 // Unique constraint (UserId, Year)
                 w.HasIndex(w => new { w.UserId, w.Year })
@@ -60,6 +90,11 @@ namespace Wallet.Api.Infrastructure.Persistence
 
                 p.Property(p => p.DefaultBalanceSource)
                  .IsRequired();
+
+                p.HasMany(p => p.Transactions)
+                .WithOne()
+                .HasForeignKey(t => t.PocketId)
+                .OnDelete(DeleteBehavior.Cascade);
 
                 p.HasQueryFilter(p => p.IsDeleted == false);
             });
@@ -83,6 +118,10 @@ namespace Wallet.Api.Infrastructure.Persistence
                  .HasForeignKey(t => t.OriginalTransactionId)
                  .OnDelete(DeleteBehavior.Cascade);// OriginalTransaction principal
 
+                t.HasOne<Category>()//TODO
+                .WithMany<Transaction>()
+                .OnDelete<Category>(DeleteBehavior.SetNull)
+
                 t.HasQueryFilter(t => t.IsDeleted == false);
             });
             // Category
@@ -99,24 +138,17 @@ namespace Wallet.Api.Infrastructure.Persistence
                  .WithMany(c => c.Subcategories)
                  .HasForeignKey(c => c.ParentCategoryId)
                  .OnDelete(DeleteBehavior.Restrict); // Categories principal
+
+                c.HasOne<AppUser>()
+                .WithMany()
+                .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
                 // Name unico per User
                 c.HasIndex(c => new { c.UserId, c.Name })
                  .IsUnique();
 
                 c.HasQueryFilter(c => c.IsDeleted == false);
-            });
-            // UserFinancialState
-            builder.Entity<UserFinancialState>(u =>
-            {
-                u.ToTable("UserFinancialStates");
-
-                u.Property(u => u.BankLiquidity).HasColumnType("numeric(18,2)");
-                u.Property(u => u.CashLiquidity).HasColumnType("numeric(18,2)");
-                u.Property(u => u.BankSavings).HasColumnType("numeric(18,2)");
-                u.Property(u => u.CashSavings).HasColumnType("numeric(18,2)");
-                u.Property(u => u.InvestedCapital).HasColumnType("numeric(18,2)");
-
-                u.HasQueryFilter(u => u.IsDeleted == false);
             });
         }
     }
