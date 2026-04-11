@@ -96,6 +96,8 @@ namespace Wallet.Api.Infrastructure.Persistence
                 .HasForeignKey(t => t.PocketId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+                p.HasIndex(p => new { p.WalletId, p.Name }).IsUnique();
+
                 p.HasQueryFilter(p => p.IsDeleted == false);
             });
             // Transaction
@@ -118,9 +120,10 @@ namespace Wallet.Api.Infrastructure.Persistence
                  .HasForeignKey(t => t.OriginalTransactionId)
                  .OnDelete(DeleteBehavior.Cascade);// OriginalTransaction principal
 
-                t.HasOne<Category>()//TODO
-                .WithMany<Transaction>()
-                .OnDelete<Category>(DeleteBehavior.SetNull)
+                t.HasOne<Category>()
+                .WithMany()
+                .HasForeignKey(t => t.CategoryId)
+                .OnDelete(DeleteBehavior.SetNull);
 
                 t.HasQueryFilter(t => t.IsDeleted == false);
             });
