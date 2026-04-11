@@ -32,11 +32,6 @@ namespace Wallet.Api.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     FirstName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    BankLiquidity = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
-                    CashLiquidity = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
-                    BankSavings = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
-                    CashSavings = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
-                    InvestedCapital = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -203,6 +198,35 @@ namespace Wallet.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserFinancialStates",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    BankLiquidity = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
+                    CashLiquidity = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
+                    BankSavings = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
+                    CashSavings = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
+                    InvestedCapital = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    UpdatedBy = table.Column<Guid>(type: "uuid", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserFinancialStates", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserFinancialStates_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Wallets",
                 columns: table => new
                 {
@@ -233,7 +257,6 @@ namespace Wallet.Api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     WalletId = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Role = table.Column<int>(type: "integer", nullable: false),
@@ -251,12 +274,6 @@ namespace Wallet.Api.Migrations
                 {
                     table.PrimaryKey("PK_Pockets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Pockets_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Pockets_Wallets_WalletId",
                         column: x => x.WalletId,
                         principalTable: "Wallets",
@@ -269,14 +286,13 @@ namespace Wallet.Api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     PocketId = table.Column<Guid>(type: "uuid", nullable: false),
                     CategoryId = table.Column<Guid>(type: "uuid", nullable: true),
                     OriginalTransactionId = table.Column<Guid>(type: "uuid", nullable: true),
-                    ImpactedBalance = table.Column<int>(type: "integer", nullable: false),
                     IsPrimaryIncome = table.Column<bool>(type: "boolean", nullable: false),
-                    Amount = table.Column<decimal>(type: "numeric", nullable: false),
                     IsIncome = table.Column<bool>(type: "boolean", nullable: false),
+                    ImpactedBalance = table.Column<int>(type: "integer", nullable: false),
+                    Amount = table.Column<decimal>(type: "numeric", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
                     TransactionDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -358,11 +374,6 @@ namespace Wallet.Api.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Pockets_UserId",
-                table: "Pockets",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Pockets_WalletId_Name",
                 table: "Pockets",
                 columns: new[] { "WalletId", "Name" },
@@ -382,6 +393,12 @@ namespace Wallet.Api.Migrations
                 name: "IX_Transactions_PocketId",
                 table: "Transactions",
                 column: "PocketId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserFinancialStates_UserId",
+                table: "UserFinancialStates",
+                column: "UserId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Wallets_UserId_Year",
@@ -410,6 +427,9 @@ namespace Wallet.Api.Migrations
 
             migrationBuilder.DropTable(
                 name: "Transactions");
+
+            migrationBuilder.DropTable(
+                name: "UserFinancialStates");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

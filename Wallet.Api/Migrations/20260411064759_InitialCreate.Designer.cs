@@ -12,7 +12,7 @@ using Wallet.Api.Infrastructure.Persistence;
 namespace Wallet.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260316065155_InitialCreate")]
+    [Migration("20260411064759_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -205,18 +205,6 @@ namespace Wallet.Api.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
 
-                    b.Property<decimal>("BankLiquidity")
-                        .HasColumnType("numeric(18,2)");
-
-                    b.Property<decimal>("BankSavings")
-                        .HasColumnType("numeric(18,2)");
-
-                    b.Property<decimal>("CashLiquidity")
-                        .HasColumnType("numeric(18,2)");
-
-                    b.Property<decimal>("CashSavings")
-                        .HasColumnType("numeric(18,2)");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("text");
@@ -241,9 +229,6 @@ namespace Wallet.Api.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
-
-                    b.Property<decimal>("InvestedCapital")
-                        .HasColumnType("numeric(18,2)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -388,15 +373,10 @@ namespace Wallet.Api.Migrations
                     b.Property<Guid?>("UpdatedBy")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid>("WalletId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.HasIndex("WalletId", "Name")
                         .IsUnique();
@@ -455,9 +435,6 @@ namespace Wallet.Api.Migrations
                     b.Property<Guid?>("UpdatedBy")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
@@ -467,6 +444,56 @@ namespace Wallet.Api.Migrations
                     b.HasIndex("PocketId");
 
                     b.ToTable("Transactions", (string)null);
+                });
+
+            modelBuilder.Entity("Wallet.Api.Domain.Entities.UserFinancialState", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("BankLiquidity")
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<decimal>("BankSavings")
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<decimal>("CashLiquidity")
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<decimal>("CashSavings")
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<decimal>("InvestedCapital")
+                        .HasColumnType("numeric(18,2)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("UserFinancialStates", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -522,13 +549,11 @@ namespace Wallet.Api.Migrations
 
             modelBuilder.Entity("Wallet.Api.Domain.Entities.AnnualWallet", b =>
                 {
-                    b.HasOne("Wallet.Api.Domain.Entities.AppUser", "User")
-                        .WithMany("Wallets")
+                    b.HasOne("Wallet.Api.Domain.Entities.AppUser", null)
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Wallet.Api.Domain.Entities.Category", b =>
@@ -538,40 +563,28 @@ namespace Wallet.Api.Migrations
                         .HasForeignKey("ParentCategoryId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Wallet.Api.Domain.Entities.AppUser", "User")
-                        .WithMany("Categories")
+                    b.HasOne("Wallet.Api.Domain.Entities.AppUser", null)
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ParentCategory");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Wallet.Api.Domain.Entities.Pocket", b =>
                 {
-                    b.HasOne("Wallet.Api.Domain.Entities.AppUser", "User")
-                        .WithMany("Pockets")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Wallet.Api.Domain.Entities.AnnualWallet", "Wallet")
+                    b.HasOne("Wallet.Api.Domain.Entities.AnnualWallet", null)
                         .WithMany("Pockets")
                         .HasForeignKey("WalletId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("User");
-
-                    b.Navigation("Wallet");
                 });
 
             modelBuilder.Entity("Wallet.Api.Domain.Entities.Transaction", b =>
                 {
-                    b.HasOne("Wallet.Api.Domain.Entities.Category", "Category")
-                        .WithMany("Transactions")
+                    b.HasOne("Wallet.Api.Domain.Entities.Category", null)
+                        .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.SetNull);
 
@@ -580,17 +593,22 @@ namespace Wallet.Api.Migrations
                         .HasForeignKey("OriginalTransactionId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Wallet.Api.Domain.Entities.Pocket", "Pocket")
+                    b.HasOne("Wallet.Api.Domain.Entities.Pocket", null)
                         .WithMany("Transactions")
                         .HasForeignKey("PocketId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
-
                     b.Navigation("OriginalTransaction");
+                });
 
-                    b.Navigation("Pocket");
+            modelBuilder.Entity("Wallet.Api.Domain.Entities.UserFinancialState", b =>
+                {
+                    b.HasOne("Wallet.Api.Domain.Entities.AppUser", null)
+                        .WithOne()
+                        .HasForeignKey("Wallet.Api.Domain.Entities.UserFinancialState", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Wallet.Api.Domain.Entities.AnnualWallet", b =>
@@ -598,20 +616,9 @@ namespace Wallet.Api.Migrations
                     b.Navigation("Pockets");
                 });
 
-            modelBuilder.Entity("Wallet.Api.Domain.Entities.AppUser", b =>
-                {
-                    b.Navigation("Categories");
-
-                    b.Navigation("Pockets");
-
-                    b.Navigation("Wallets");
-                });
-
             modelBuilder.Entity("Wallet.Api.Domain.Entities.Category", b =>
                 {
                     b.Navigation("Subcategories");
-
-                    b.Navigation("Transactions");
                 });
 
             modelBuilder.Entity("Wallet.Api.Domain.Entities.Pocket", b =>
