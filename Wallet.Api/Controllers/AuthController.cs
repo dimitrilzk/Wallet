@@ -94,19 +94,5 @@ namespace Wallet.Api.Controllers
 
             return Ok(response);
         }
-
-        [HttpPost("debug-token")]
-        [ProducesResponseType(typeof(object), StatusCodes.Status200OK)]
-        public IActionResult GenerateDebugToken()
-        {
-            var fakeUser = new AppUser("Test");
-            var tokenResult = jwtTokenGenerator.GenerateTokenJwt(fakeUser);
-
-            return Ok(new
-            {
-                access_token = tokenResult.AccessToken,
-                expires_at_utc = tokenResult.ExpiresAtUtc
-            });
-        }
     }
 }
