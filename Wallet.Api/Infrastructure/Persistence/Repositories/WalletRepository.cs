@@ -20,7 +20,8 @@ namespace Wallet.Api.Infrastructure.Persistence.Repositories
 
         public async Task<AnnualWallet?> GetByUserAndYearAsync(Guid userId, int year)
         {
-            return await dbContext.Wallets.Where(w => w.UserId == userId && w.Year == year)
+            return await dbContext.Wallets
+                .Where(w => w.UserId == userId && w.Year == year)
                 .Include(w => w.Pockets)
                 .FirstOrDefaultAsync();
         }
