@@ -1,3 +1,6 @@
 <Solution>
   <Project Path="Wallet.Api/Wallet.Api.csproj" Id="172fc4fe-8bec-42be-ab27-c08917ccee32" />
+  <Project Path="Wallet.Application/Wallet.Application.csproj" Id="152fa07b-0d9a-4f09-b7dd-5007bb52783c" />
+  <Project Path="Wallet.Domain/Wallet.Domain.csproj" Id="0146fc47-fcdd-46ca-93a1-2c91b9503917" />
+  <Project Path="Wallet.Infrastructure/Wallet.Infrastructure.csproj" Id="9e7c757f-d98d-4260-97f2-862827fd349b" />
 </Solution>
