@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using System.Text;
-using Wallet.Api.Application.Auth;
-using Wallet.Api.Application.Interfaces;
-using Wallet.Api.Application.Services;
+using Wallet.Application.Interfaces;
+using Wallet.Application.Services;
 using Wallet.Api.Configuration;
-using Wallet.Api.Domain.Entities;
-using Wallet.Api.Infrastructure.Auth;
-using Wallet.Api.Infrastructure.Persistence;
-using Wallet.Api.Infrastructure.Persistence.Repositories;
+using Wallet.Domain.Entities;
+using Wallet.Infrastructure.Auth;
+using Wallet.Infrastructure.Persistence;
+using Wallet.Infrastructure.Persistence.Repositories;
+using Wallet.Application.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 

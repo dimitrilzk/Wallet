@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Wallet.Api.Application.Auth;
-using Wallet.Api.Domain.Entities;
-using Wallet.Api.DTOs.Auth;
+using Wallet.Application.Auth;
+using Wallet.Domain.Entities;
+using Wallet.Application.DTOs.Auth;
 
 namespace Wallet.Api.Controllers
 {

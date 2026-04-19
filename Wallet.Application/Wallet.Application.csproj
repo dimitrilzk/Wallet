@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Wallet.Domain\Wallet.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

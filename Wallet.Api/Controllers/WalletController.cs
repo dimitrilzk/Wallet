@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Wallet.Api.Application.Extensions;
-using Wallet.Api.Application.Interfaces;
-using Wallet.Api.DTOs.Wallet;
+using Wallet.Application.Interfaces;
+using Wallet.Application.DTOs.Wallet;
+using Wallet.Application.Extensions;
 
 namespace Wallet.Api.Controllers
 {
