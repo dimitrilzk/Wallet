@@ -6,12 +6,12 @@ using Scalar.AspNetCore;
 using System.Text;
 using Wallet.Application.Interfaces;
 using Wallet.Application.Services;
-using Wallet.Api.Configuration;
 using Wallet.Domain.Entities;
 using Wallet.Infrastructure.Auth;
 using Wallet.Infrastructure.Persistence;
 using Wallet.Infrastructure.Persistence.Repositories;
 using Wallet.Application.Auth;
+using Wallet.Infrastructure.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 

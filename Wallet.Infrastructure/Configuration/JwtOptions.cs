@@ -1,4 +1,4 @@
-﻿namespace Wallet.Api.Configuration
+﻿namespace Wallet.Infrastructure.Configuration
 {
     public class JwtOptions
     {

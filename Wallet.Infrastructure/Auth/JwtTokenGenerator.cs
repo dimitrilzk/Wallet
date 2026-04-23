@@ -3,9 +3,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Wallet.Api.Configuration;
 using Wallet.Domain.Entities;
 using Wallet.Application.Auth;
+using Wallet.Infrastructure.Configuration;
 
 namespace Wallet.Infrastructure.Auth
 {
