@@ -31,11 +31,9 @@ namespace Wallet.Domain.Entities
         public PocketRole Role { get; private set; } // Expense - Income - SavingGoal - Investment
         public BalanceSource DefaultBalanceSource { get; private set; } // BankLiquidity - CashLiquidity - BankSavings - CashSavings 
         public bool IsFixedBudget { get; private set; } // UX: Segna questa pocket come Budget fisso se vuoi considerare il suo importo come un costo/risparmio fisso da togliere dal tuo reddito principale, a prescindere dalla somma precisa delle transazioni.
-        public decimal? ManualOverrideAmount { get; private set; } // Valore arrotondato e sovrascrivente del
-
-        // Saldo attuale della pocket (derivato o mantenuto)
-        public decimal CurrentBalance => Transactions?.Sum(t => t.SignedAmount) ?? 0m;
-        public decimal? EffectivePocketBalance => ManualOverrideAmount ?? CurrentBalance;
+        public decimal? ManualOverrideAmount { get; private set; } // Valore arrotondato e sovrascrivente della pocket in caso sia di tipo Expense
+        public decimal CurrentBalance => Transactions?.Sum(t => t.SignedAmount) ?? 0m; // Saldo attuale della pocket (derivato o mantenuto)
+        public decimal EffectivePocketBalance => ManualOverrideAmount ?? CurrentBalance;
 
         // IAuditable
         public DateTime CreatedAt { get; set; }

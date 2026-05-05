@@ -1,6 +1,7 @@
 ﻿using Wallet.Domain.Entities;
 using Wallet.Application.DTOs.Wallet;
 using Wallet.Application.Interfaces;
+using Wallet.Application.DTOs.Pocket;
 
 namespace Wallet.Application.Services
 {
@@ -32,7 +33,16 @@ namespace Wallet.Application.Services
                 Id = wallet.Id,
                 Year = wallet.Year,
                 WalletStatus = wallet.WalletStatus,
-                Pockets = wallet.Pockets.ToList() //TODO dto per le pocket meglio non esporre l'entity completa
+                Pockets = wallet.Pockets.Select(p => new PocketsInWalletResponseDto
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Role = p.Role,
+                    DefaultBalanceSource = p.DefaultBalanceSource,
+                    IsFixedBudget = p.IsFixedBudget,
+                    EffectivePocketBalance = p.EffectivePocketBalance
+                })
+                .ToList() 
             };
         }
     }
