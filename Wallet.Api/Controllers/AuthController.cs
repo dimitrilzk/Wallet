@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Wallet.Application.Auth;
 using Wallet.Domain.Entities;
 using Wallet.Application.DTOs.Auth;
+using Wallet.Application.Interfaces;
 
 namespace Wallet.Api.Controllers
 {
@@ -12,11 +13,13 @@ namespace Wallet.Api.Controllers
     {
         private readonly IJwtTokenGenerator jwtTokenGenerator;
         private readonly UserManager<AppUser> userManager;
+        private readonly IUnitOfWork unitOfWork;
 
-        public AuthController(IJwtTokenGenerator jwtTokenGenerator, UserManager<AppUser> userManager)
+        public AuthController(IJwtTokenGenerator jwtTokenGenerator, UserManager<AppUser> userManager, IUnitOfWork unitOfWork)
         {
             this.jwtTokenGenerator = jwtTokenGenerator;
             this.userManager = userManager;
+            this.unitOfWork = unitOfWork;
         }
 
         [HttpPost("register")]
@@ -46,6 +49,8 @@ namespace Wallet.Api.Controllers
                 var errors = result.Errors.Select(e => e.Description).ToArray();
                 return BadRequest(new { errors });
             }
+
+            await unitOfWork.SaveChangesAsync();
 
             // Auto-login
             var tokenResult = jwtTokenGenerator.GenerateTokenJwt(user);
