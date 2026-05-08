@@ -11,16 +11,16 @@ namespace Wallet.Infrastructure.Auth
 {
     public sealed class JwtTokenGenerator : IJwtTokenGenerator
     {
-        private readonly JwtOptions _options;
+        private readonly JwtOptions options;
 
         public JwtTokenGenerator(IOptions<JwtOptions> options)
         {
-            _options = options.Value;
+            this.options = options.Value;
         }
 
         public JwtTokenResult GenerateTokenJwt(AppUser user)
         {
-            var keyBytes = Encoding.UTF8.GetBytes(_options.SigningKey);
+            var keyBytes = Encoding.UTF8.GetBytes(options.SigningKey);
             var securityKey = new SymmetricSecurityKey(keyBytes);
             var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
@@ -34,8 +34,8 @@ namespace Wallet.Infrastructure.Auth
 
             var expiresAt = DateTime.UtcNow.AddMinutes(60);
 
-            var jwtToken = new JwtSecurityToken(issuer: _options.Issuer,
-                                                audience: _options.Audience,
+            var jwtToken = new JwtSecurityToken(issuer: options.Issuer,
+                                                audience: options.Audience,
                                                 claims: claims,
                                                 notBefore: DateTime.UtcNow,
                                                 expires: expiresAt,
