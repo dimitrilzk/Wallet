@@ -24,7 +24,7 @@ namespace Wallet.Domain.Entities
             IsPrimaryIncome = isPrimaryIncome;
             CategoryId = categoryId;
             Description = description;
-        }
+        }       
 
         public Guid Id { get; private set; }
         public Guid PocketId { get; private set; }
