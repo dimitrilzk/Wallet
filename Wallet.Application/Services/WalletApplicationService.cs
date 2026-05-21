@@ -23,7 +23,6 @@ namespace Wallet.Application.Services
             if (wallet is null)
             {
                 wallet = AnnualWallet.CreateForYear(userId, year);
-
                 await walletRepository.AddAsync(wallet);
                 await unitOfWork.SaveChangesAsync();
             }
@@ -41,8 +40,7 @@ namespace Wallet.Application.Services
                     DefaultBalanceSource = p.DefaultBalanceSource,
                     IsFixedBudget = p.IsFixedBudget,
                     EffectivePocketBalance = p.EffectivePocketBalance
-                })
-                .ToList() 
+                }).ToList()
             };
         }
     }
