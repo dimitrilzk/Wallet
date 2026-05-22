@@ -26,7 +26,7 @@ namespace Wallet.Domain.Entities
             Description = description;
         }       
 
-        public Guid Id { get; private set; }
+        public Guid Id { get; private set; } 
         public Guid PocketId { get; private set; }
         public Guid? CategoryId { get; private set; }
         public Guid? OriginalTransactionId { get; private set; }
