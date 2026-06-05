@@ -32,6 +32,8 @@ namespace Wallet.Domain.Entities
         public Guid? OriginalTransactionId { get; private set; }
 
         public bool IsPrimaryIncome { get; private set; }
+
+        //TODO create value object?
         public bool IsIncome { get; private set; } // true = entrata, false = uscita
         public BalanceSource ImpactedBalance { get; private set; } // BankLiquidity - CashLiquidity - BankSavings - CashSavings 
         public decimal Amount { get; private set; } // sempre positivo
