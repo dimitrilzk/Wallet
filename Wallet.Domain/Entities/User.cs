@@ -1,15 +1,17 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Wallet.Domain.Interfaces;
+﻿using Wallet.Domain.Interfaces;
 
 namespace Wallet.Domain.Entities
 {
-    public class AppUser : IdentityUser<Guid>, IAuditable, ISoftDeletable
+    public class User : IEntity, IAuditable, ISoftDeletable
     {
-        protected AppUser() { }
-        public AppUser(string firstName)
+        protected User() { }
+        public User(Guid IdentityUserId, string firstName)
         {
+            Id = IdentityUserId;
             FirstName = firstName;
         }
+
+        public Guid Id { get; private set; }
 
         public string FirstName { get; private set; }
 
