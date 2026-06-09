@@ -5,10 +5,10 @@ namespace Wallet.Domain.Entities
     public class User : IEntity, IAuditable, ISoftDeletable
     {
         protected User() { }
-        public User(Guid IdentityUserId, string firstName)
+        public User(string firstName)
         {
-            Id = IdentityUserId;
-            FirstName = firstName;
+            Id = Guid.NewGuid();
+            FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName));
         }
 
         public Guid Id { get; private set; }

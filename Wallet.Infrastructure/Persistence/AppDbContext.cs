@@ -2,13 +2,15 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Wallet.Domain.Entities;
+using Wallet.Infrastructure.Auth;
 
 namespace Wallet.Infrastructure.Persistence
 {
-    public class AppDbContext : IdentityDbContext<AppUser, IdentityRole<Guid>, Guid>
+    public class AppDbContext : IdentityDbContext<AppIdentityUser, IdentityRole<Guid>, Guid>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
+        public DbSet<User> DomainUsers { get; set; }
         public DbSet<AnnualWallet> Wallets { get; set; }
         public DbSet<Pocket> Pockets { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
@@ -19,10 +21,14 @@ namespace Wallet.Infrastructure.Persistence
         {
             base.OnModelCreating(builder); //prima chiamata a base cosi Identity configura le sue tabelle
 
-            // AppUser
-            builder.Entity<AppUser>(u =>
+            // User
+            builder.Entity<User>(u =>
             {
-                // AspNetUsers è già configurata dalla base class; si possono solo aggiungere constraints
+                u.ToTable("Users");
+
+                u.HasKey(u => u.Id);
+                u.Property(u => u.Id).ValueGeneratedNever(); // non far generare l'id a EF
+
                 u.Property(u => u.FirstName)
                  .IsRequired()
                  .HasMaxLength(100);
@@ -40,7 +46,7 @@ namespace Wallet.Infrastructure.Persistence
                 u.Property(u => u.CashSavings).HasColumnType("numeric(18,2)");
                 u.Property(u => u.InvestedCapital).HasColumnType("numeric(18,2)");
 
-                u.HasOne<AppUser>()
+                u.HasOne<User>()
                 .WithOne()
                 .HasForeignKey<UserFinancialState>(uf => uf.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
@@ -60,7 +66,7 @@ namespace Wallet.Infrastructure.Persistence
                 w.Property(w => w.WalletStatus)
                     .IsRequired();
 
-                w.HasOne<AppUser>()
+                w.HasOne<User>()
                 .WithMany()
                 .HasForeignKey(w => w.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
@@ -142,7 +148,7 @@ namespace Wallet.Infrastructure.Persistence
                  .HasForeignKey(c => c.ParentCategoryId)
                  .OnDelete(DeleteBehavior.Restrict); // Categories principal
 
-                c.HasOne<AppUser>()
+                c.HasOne<User>()
                 .WithMany()
                 .HasForeignKey(c => c.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
