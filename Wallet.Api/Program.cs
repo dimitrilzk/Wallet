@@ -74,7 +74,7 @@ builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 builder.Services.AddScoped<IWalletRepository, WalletRepository>();
-builder.Services.AddScoped<IWalletApplicationService, WalletApplicationService>();
+builder.Services.AddScoped<IWalletService, WalletApplicationService>();
 
 builder.Services.AddAuthorization();
 
