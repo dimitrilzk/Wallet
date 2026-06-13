@@ -6,7 +6,6 @@ using Scalar.AspNetCore;
 using System.Text;
 using Wallet.Application.Interfaces;
 using Wallet.Application.Services;
-using Wallet.Domain.Entities;
 using Wallet.Infrastructure.Auth;
 using Wallet.Infrastructure.Persistence;
 using Wallet.Infrastructure.Persistence.Repositories;
@@ -22,7 +21,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 
 //Identity
-builder.Services.AddIdentityCore<AppUser>(options =>
+builder.Services.AddIdentityCore<AppIdentityUser>(options =>
 {
     options.Password.RequireDigit = true;
     options.Password.RequiredLength = 8;
@@ -74,7 +73,7 @@ builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 builder.Services.AddScoped<IWalletRepository, WalletRepository>();
-builder.Services.AddScoped<IWalletService, WalletApplicationService>();
+builder.Services.AddScoped<IWalletApplicationService, WalletApplicationService>();
 
 builder.Services.AddAuthorization();
 

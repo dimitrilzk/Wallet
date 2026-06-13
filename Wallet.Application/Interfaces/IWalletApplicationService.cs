@@ -2,7 +2,7 @@
 
 namespace Wallet.Application.Interfaces
 {
-    public interface IWalletService
+    public interface IWalletApplicationService
     {
         Task<WalletResponseDto> GetOrCreateWalletAsync(Guid userId, int year);
     }

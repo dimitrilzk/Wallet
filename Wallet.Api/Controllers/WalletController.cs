@@ -10,9 +10,9 @@ namespace Wallet.Api.Controllers
     [Route("api/[controller]")]
     public class WalletController : ControllerBase
     {
-        private readonly IWalletService walletService;
+        private readonly IWalletApplicationService walletService;
 
-        public WalletController(IWalletService walletService)
+        public WalletController(IWalletApplicationService walletService)
         {
             this.walletService = walletService;
         }

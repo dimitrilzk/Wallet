@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Wallet.Application.Interfaces;
 
 namespace Wallet.Application.Services
 {
-    public class AuthApplicationService
+    public class AuthApplicationService : IAuthApplicationService
     {
     }
 }
