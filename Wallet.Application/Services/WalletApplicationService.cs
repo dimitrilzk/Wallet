@@ -16,7 +16,7 @@ namespace Wallet.Application.Services
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task<WalletResponseDto> GetOrCreateWalletAsync(Guid userId, int year)
+        public async Task<WalletResponseDto> GetOrCreateWalletAsync(Guid userId, int year)//todo fake
         {
             var wallet = await walletRepository.GetByUserAndYearAsync(userId, year);
 
